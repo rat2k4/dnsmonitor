@@ -1,0 +1,10 @@
+# DNS resolvers to poll, one per line. Forms: host, host:port, or [v6]:port.
+# Blank lines and '#' comments are ignored. Edited from the web Control panel.
+1.1.1.1
+8.8.8.8
+8.8.4.4
+200.28.4.129
+200.28.4.130
+201.220.245.129
+201.220.245.130
+200.50.96.90
