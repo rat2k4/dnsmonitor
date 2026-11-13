@@ -1,6 +1,18 @@
-# DNS resolvers to poll, one per line. Forms: host, host:port, or [v6]:port.
-# Blank lines and '#' comments are ignored. Edited from the web Control panel.
+# servers.txt — DNS resolvers to test, one per line.
+#
+# Read by:  python main.py poll | profile | compare | register   (--servers-file)
+#           and the web Control page, which rewrites this file on save.
+#
+# Accepted forms (literal IP addresses only, no hostnames):
+#   8.8.8.8                  IPv4, port 53
+#   8.8.8.8:5353             IPv4 with port
+#   2606:4700:4700::1111     IPv6, port 53
+#   [2606:4700:4700::1111]:53  IPv6 with port (brackets required)
+# Blank lines and anything after '#' are ignored.
+#
+# Keep only public resolvers in the committed copy. Add ISP or internal
+# resolvers locally and do not commit them.
+
 1.1.1.1
 8.8.8.8
 8.8.4.4
-
