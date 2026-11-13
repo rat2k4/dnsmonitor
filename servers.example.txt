@@ -10,8 +10,8 @@
 #   [2606:4700:4700::1111]:53  IPv6 with port (brackets required)
 # Blank lines and anything after '#' are ignored.
 #
-# Keep only public resolvers in the committed copy. Add ISP or internal
-# resolvers locally and do not commit them.
+# servers.txt is git-ignored, so private resolvers stay local. The committed
+# template is servers.example.txt (public resolvers only).
 
 1.1.1.1
 8.8.8.8

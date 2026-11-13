@@ -15,3 +15,7 @@ dns-failures.db
 # Local secrets / private config
 .env
 *.db.bak-*
+
+# Machine-specific config: copy from the *.example files, never commit
+servers.txt
+deploy.sh

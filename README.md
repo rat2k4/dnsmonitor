@@ -44,11 +44,25 @@ python main.py --help            # list every subcommand
 
 ### 2. Pick your servers and domains
 
+```bash
+cp servers.example.txt servers.txt    # resolvers to test; add your own here
+```
+
 `servers.txt` (resolvers to test) and `dns.txt` (domains to query) are read by
 `poll`, `profile`, `compare` and `register` whenever you don't pass servers on
 the command line. Each file starts with a comment block describing its format.
-The committed copies hold only public resolvers (Cloudflare, Google). Add your
-own resolvers locally.
+
+`servers.txt` is git-ignored, so your ISP or internal resolvers stay on your
+machine. `servers.example.txt` is the committed template with public resolvers
+only (Cloudflare, Google).
+
+To push the project to a remote host with rsync, do the same with the deploy
+script and set your destination in it:
+
+```bash
+cp deploy.example.sh deploy.sh        # edit DEST; deploy.sh is git-ignored
+./deploy.sh -n                        # dry run
+```
 
 ### 3. Run each command
 
