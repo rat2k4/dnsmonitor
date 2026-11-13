@@ -234,7 +234,7 @@ A one-shot **capability & hygiene audit** of one or more resolvers — twenty
 pointed questions instead of a stream of probes:
 
 ```bash
-python main.py profile 1.1.1.1 201.220.245.130         # or read servers.txt
+python main.py profile 1.1.1.1 8.8.8.8         # or read servers.txt
 python main.py profile --hijack-zone cl --json audit.json
 python main.py profile --oarc                          # add spoofability raters
 ```
@@ -274,7 +274,7 @@ answers — the direct test for tampering, stale caches, or a broken forwarder:
 
 ```bash
 python main.py compare --qname-file dns.txt            # servers from servers.txt
-python main.py compare 1.1.1.1 200.28.4.129 --qnames example.com,emol.com:A
+python main.py compare 1.1.1.1 8.8.8.8 --qnames example.com,emol.com:A
 ```
 
 Answers are grouped by *overlap*, not exact equality: CDN names hand out
