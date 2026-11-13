@@ -5,13 +5,13 @@
 # it lands at ~/DNStester/... with the same layout as here.
 #
 # Usage:
-#   ./deploy.sh              # sync to akonow@10.184.8.61:
+#   ./deploy.sh              # sync to the default user@server: (edit DEST below)
 #   ./deploy.sh -n           # dry run (show what would transfer, change nothing)
 #   ./deploy.sh user@host:path/   # override the destination
 #
 set -euo pipefail
 
-# Destination defaults to the home directory of akonow on the target host
+# Destination defaults to the remote user's home directory on the target host
 # (empty path after the colon == remote $HOME).
 DEST="${1:-user@server:}"
 DRY_RUN=""

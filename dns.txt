@@ -1,3 +1,13 @@
+# dns.txt — query pool: the domains each resolver is asked for, one per line.
+#
+# Read by:  python main.py poll | compare | register   (--qname-file)
+#           and the web Control page, which rewrites this file on save.
+#
+# Accepted forms:
+#   example.com              queried with the default type (--qtype, default A)
+#   example.com:AAAA         explicit record type (A, AAAA, MX, NS, TXT, ...)
+# Blank lines and anything after '#' are ignored.
+
 www.google.cl
 www.youtube.com
 www.facebook.com
