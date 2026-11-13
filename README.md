@@ -17,24 +17,96 @@ A **ramp** orchestrator drives the client through a series of increasing QPS
 steps, snapshots the monitor around each step, records the full latency-vs-QPS
 curve, and flags the saturation / breaking point.
 
-No third-party Python packages are required — it is pure stdlib and the monitor
-shells out to your system `ssh` (honouring `~/.ssh/config`, agent and keys).
+The command-line tools are pure stdlib; the monitor shells out to your system
+`ssh` (honouring `~/.ssh/config`, agent and keys). Only the optional web
+dashboard (`dashboard.py`) needs third-party packages: Streamlit and pandas.
 Requires Python 3.14+.
 
 ## Quick start
 
+### 1. Clone and install
+
+You need Python 3.14+ and [uv](https://docs.astral.sh/uv/). Plain `pip`
+works too.
+
 ```bash
-# Full ramp: 100 -> 3000 qps in 250-qps steps, 15s each, with monitoring.
-python main.py ramp \
-    --target 10.0.0.5 \
-    --qps-start 100 --qps-stop 3000 --qps-step 250 \
-    --duration 15 \
-    --ssh-host 10.0.0.5 --ssh-user admin --sudo \
-    --csv results.csv --json results.json
+git clone https://github.com/rat2k4/dnsmonitor.git
+cd dnsmonitor
+
+uv sync                          # creates .venv and installs dependencies
+source .venv/bin/activate        # or prefix each command with `uv run`
+
+# Without uv:
+#   python3.14 -m venv .venv && source .venv/bin/activate && pip install -e .
+
+python main.py --help            # list every subcommand
 ```
 
+### 2. Pick your servers and domains
+
+`servers.txt` (resolvers to test) and `dns.txt` (domains to query) are read by
+`poll`, `profile`, `compare` and `register` whenever you don't pass servers on
+the command line. Each file starts with a comment block describing its format.
+The committed copies hold only public resolvers (Cloudflare, Google). Add your
+own resolvers locally.
+
+### 3. Run each command
+
+The examples use public resolvers (`1.1.1.1`, `8.8.8.8`). `ramp`, `client` and
+`monitor` are load and stats tools for a resolver **you control**: point
+`--target` / `--ssh-host` at your own Unbound host (`10.0.0.5` below is a
+placeholder). Don't load-test public resolvers.
+
+```bash
+# ramp: stepwise QPS ramp against your resolver, with Unbound stats over SSH
+python main.py ramp --target 10.0.0.5 \
+    --qps-start 100 --qps-stop 3000 --qps-step 250 --duration 15 \
+    --ssh-host 10.0.0.5 --ssh-user admin --sudo \
+    --csv results.csv --json results.json
+
+# client: a single load run at a fixed QPS (quick sanity check)
+python main.py client --target 10.0.0.5 --qps 500 --duration 10
+
+# monitor: one unbound-control stats delta over 10 s, no load applied
+python main.py monitor --ssh-host 10.0.0.5 --ssh-user admin --sudo --interval 10
+
+# poll: live terminal dashboard of response quality (q to quit);
+# --log-db records every failure to SQLite for export/dashboard
+python main.py poll 1.1.1.1 8.8.8.8 --qname-file dns.txt --log-db dns-failures.db
+
+# profile: one-shot capability and hygiene audit of each resolver
+python main.py profile 1.1.1.1 8.8.8.8
+
+# compare: send the same queries to every resolver and diff the answers
+python main.py compare 1.1.1.1 8.8.8.8 --qnames example.com,example.com:AAAA
+
+# register: watch servers.txt / dns.txt and record new entries once verified
+python main.py register --log-db dns-failures.db
+
+# export: dump the poll failure database to Excel or CSV
+python main.py export dns-failures.db -o failures.xlsx
+```
+
+With no servers on the command line, `poll`, `profile` and `compare` read
+`servers.txt`. For example, `python main.py poll --qname-file dns.txt` polls
+every resolver in the file.
+
+### 4. Web dashboard
+
+```bash
+streamlit run dashboard.py                              # opens http://localhost:8501
+streamlit run dashboard.py -- --db /path/to/dns-failures.db
+```
+
+The dashboard charts the `--log-db` failure database. Its **Control** page
+edits `servers.txt` / `dns.txt` and starts or stops `poll` and `register` in
+the background, so you don't need the CLI.
+
+### More `ramp` details
+
 If `--ssh-host` is omitted (or the host is unreachable) the ramp still runs
-client-side only; the Unbound columns just show `-`.
+client-side only; the Unbound columns just show `-`. See
+[Subcommands](#subcommands) below for every option.
 
 ## Subcommands
 
