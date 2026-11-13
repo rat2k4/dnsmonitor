@@ -4,6 +4,9 @@
 # structure. The whole project directory is copied into the remote's home, so
 # it lands at ~/DNStester/... with the same layout as here.
 #
+# Setup: cp deploy.example.sh deploy.sh, then set DEST below to your host.
+# deploy.sh is git-ignored, so your real user/host never gets committed.
+#
 # Usage:
 #   ./deploy.sh              # sync to the default user@server: (edit DEST below)
 #   ./deploy.sh -n           # dry run (show what would transfer, change nothing)

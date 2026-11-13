@@ -239,11 +239,12 @@ def _servers_from_args(args) -> list[str] | None:
                 ]
         except OSError as exc:
             print(f"cannot read --servers-file: {exc}", file=sys.stderr)
+            print("  start with: cp servers.example.txt servers.txt", file=sys.stderr)
             return None
     if not servers:
         print(
             "no DNS servers: pass them as arguments or list them in "
-            f"{args.servers_file}",
+            f"{args.servers_file} (start with: cp servers.example.txt servers.txt)",
             file=sys.stderr,
         )
         return None
