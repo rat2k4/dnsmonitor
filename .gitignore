@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Poller / registrar runtime artifacts (Control panel)
+.poll.pid
+.poll.log
+.register.pid
+.register.log
+
+# Failure-log database produced by `poll --log-db`
+dns-failures.db
+
+# Local secrets / private config
+.env
+*.db.bak-*
