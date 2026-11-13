@@ -13,12 +13,12 @@ set -euo pipefail
 
 # Destination defaults to the home directory of akonow on the target host
 # (empty path after the colon == remote $HOME).
-DEST="${1:-akonow@10.184.8.61:}"
+DEST="${1:-user@server:}"
 DRY_RUN=""
 
 if [[ "${1:-}" == "-n" || "${1:-}" == "--dry-run" ]]; then
     DRY_RUN="--dry-run"
-    DEST="${2:-akonow@10.184.8.61:}"
+    DEST="${2:-user@server:}"
 fi
 
 # The directory this script lives in == the project root we want to ship.
